@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>>
+    <string-array name="questions_array">
+        <item>Harrison a cool guy.</item>
+        <item>The color orange is named after the fruit.</item>
+        <item>George Washington had wooden teeth.</item>
+        <item>Some turtles can breathe through their butts.</item>
+        <item>South Africa has 25 official languages.</item>
+    </string-array>
+
+    <integer-array name="answers_array" >
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+    </integer-array>
+</resources>
