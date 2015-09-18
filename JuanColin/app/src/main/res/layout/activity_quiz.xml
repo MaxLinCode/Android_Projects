@@ -6,11 +6,10 @@
     android:orientation="vertical"
     tools:context=".QuizActivity">
 
-    <TextView
+    <ImageView
         android:id="@+id/answerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"/>

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +16,7 @@ public class QuizActivity extends AppCompatActivity {
     private static final String LOG_TAG = QuizActivity.class.getCanonicalName();
 
     private TextView textView;
-    private TextView answerView;
+    private ImageView mAnswerView;
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
@@ -33,7 +34,9 @@ public class QuizActivity extends AppCompatActivity {
 
         // get textviews
         textView = (TextView)findViewById(R.id.textView);
-        answerView = (TextView)findViewById(R.id.answerView);
+
+        // get answer view
+        mAnswerView = (ImageView)findViewById(R.id.answerView);
 
         // get buttons
         mTrueButton = (Button)findViewById(R.id.true_button);
@@ -52,6 +55,8 @@ public class QuizActivity extends AppCompatActivity {
 
         // show first question
         textView.setText(questions[0]);
+        // set first image
+        mAnswerView.setImageResource(R.drawable.question_mark);
 
         // set listeners
         mTrueButton.setOnClickListener(new View.OnClickListener() {
@@ -83,17 +88,17 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void checkAnswer(int in, View v) {
-        if (questionIndex < questions.length && currQuestionAnswered == false) {
+        if (questionIndex < questions.length && !currQuestionAnswered) {
             if (in == answers[questionIndex]) {
                 // correct
-                answerView.setText(R.string.correct_text);
+                mAnswerView.setImageResource(R.drawable.technically_correct);
                 v.setBackgroundColor(Color.parseColor("#4DFF4D"));   // green
-                Toast.makeText(this, R.string.correct_text, Toast.LENGTH_SHORT);
+                Toast.makeText(QuizActivity.this, R.string.correct_text, Toast.LENGTH_SHORT);
             } else {
                 // incorrect
-                answerView.setText(R.string.incorrect_text);
+                mAnswerView.setImageResource(R.drawable.politically_incorrect);
                 v.setBackgroundColor(Color.parseColor("#FF7070"));   // red
-                Toast.makeText(this, R.string.incorrect_text, Toast.LENGTH_SHORT);
+                Toast.makeText(QuizActivity.this, R.string.incorrect_text, Toast.LENGTH_SHORT);
             }
         }
     }
@@ -105,7 +110,7 @@ public class QuizActivity extends AppCompatActivity {
             // set text for next question
             textView.setText(questions[questionIndex]);
             // clear correct/incorrect box
-            answerView.setText("");
+            mAnswerView.setImageResource(R.drawable.question_mark);
             // change background of buttons to default
             mTrueButton.setBackground(mDefaultButton);
             mFalseButton.setBackground(mDefaultButton);
@@ -140,7 +145,8 @@ public class QuizActivity extends AppCompatActivity {
             questionIndex = 0;
             textView.setText(questions[0]);
             // clear correct/incorrect box
-            answerView.setText("");
+            //answerView.setText("");
+            mAnswerView.setImageResource(R.drawable.question_mark);
             // change background of buttons to default
             mTrueButton.setBackground(mDefaultButton);
             mFalseButton.setBackground(mDefaultButton);
