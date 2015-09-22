@@ -1,5 +1,6 @@
 package com.microlux.maxlin.juancolin;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,12 +21,13 @@ public class QuizActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mPrevButton;
     private Drawable mDefaultButton;
 
+    private QuizView[] quizViews;
+    private QuizView currQV;
     private int questionIndex;
-    private String[] questions;
-    private int[] answers;
-    private boolean currQuestionAnswered;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +44,29 @@ public class QuizActivity extends AppCompatActivity {
         mTrueButton = (Button)findViewById(R.id.true_button);
         mFalseButton = (Button)findViewById(R.id.false_button);
         mNextButton = (Button)findViewById(R.id.next_button);
+        mPrevButton = (Button)findViewById(R.id.prev_button);
 
         // keep default button's drawable
         mDefaultButton = mNextButton.getBackground();
 
         // init variables
-        questions = getResources().getStringArray(R.array.questions_array);
-        answers = getResources().getIntArray(R.array.answers_array);
-        questionIndex = 0;
-        currQuestionAnswered = false;    // for locking in answer
+        String[] questions = getResources().getStringArray(R.array.questions_array);
+        int[] answers = getResources().getIntArray(R.array.answers_array);
+        quizViews = new QuizView[answers.length];
 
+        // load in questions and answers in to quizview
+        for (int i = 0; i < quizViews.length; i++) {
+            quizViews[i] = new QuizView(questions[i], answers[i]==1);
+        }
+
+        // dispose of unneeded arrays
+        questions = null;
+        answers = null;
+        questionIndex = 0;
+        currQV = quizViews[questionIndex];
 
         // show first question
-        textView.setText(questions[0]);
+        textView.setText(currQV.getQuestion());
         // set first image
         mAnswerView.setImageResource(R.drawable.question_mark);
 
@@ -64,7 +76,7 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // handle when true is pressed
                 checkAnswer(1, v);
-                currQuestionAnswered = true;
+                currQV.isAnswered = true;
             }
         });
 
@@ -73,7 +85,7 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // handle when false is pressed
                 checkAnswer(0, v);
-                currQuestionAnswered = true;
+                currQV.isAnswered = true;
             }
         });
 
@@ -84,42 +96,79 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        // add the answer text in the future
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prevQuestion();
+            }
+        });
     }
 
     private void checkAnswer(int in, View v) {
-        if (questionIndex < questions.length && !currQuestionAnswered) {
-            if (in == answers[questionIndex]) {
+        if (questionIndex < quizViews.length && !currQV.isAnswered) {
+            if ((in == 1) == currQV.getAnswer()) {
                 // correct
                 mAnswerView.setImageResource(R.drawable.technically_correct);
                 v.setBackgroundColor(Color.parseColor("#4DFF4D"));   // green
-                Toast.makeText(QuizActivity.this, R.string.correct_text, Toast.LENGTH_SHORT);
             } else {
                 // incorrect
                 mAnswerView.setImageResource(R.drawable.politically_incorrect);
                 v.setBackgroundColor(Color.parseColor("#FF7070"));   // red
-                Toast.makeText(QuizActivity.this, R.string.incorrect_text, Toast.LENGTH_SHORT);
             }
         }
     }
 
     private void nextQuestion() {
-        if (questionIndex + 1 < questions.length) {
+        if (questionIndex + 1 < quizViews.length) {
             // go to next question
             questionIndex++;
+            currQV = quizViews[questionIndex];
             // set text for next question
-            textView.setText(questions[questionIndex]);
+            textView.setText(currQV.getQuestion());
             // clear correct/incorrect box
             mAnswerView.setImageResource(R.drawable.question_mark);
             // change background of buttons to default
             mTrueButton.setBackground(mDefaultButton);
             mFalseButton.setBackground(mDefaultButton);
-            // allow true/false choice
-            currQuestionAnswered = false;
             return;
         }
 
         //handle when quiz is over
+
+        return;
+    }
+
+    private void prevQuestion() {
+        if (questionIndex - 1 >= 0) {
+            // go to prev question
+            questionIndex--;
+            currQV = quizViews[questionIndex];
+            // set screen for prev question
+            textView.setText(currQV.getQuestion());
+            if (currQV.isAnswered) {
+                if (currQV.getAnswer()) {
+                    // true
+                    mAnswerView.setImageResource(R.drawable.technically_correct);
+                    // change background of buttons to default
+                    mTrueButton.setBackground(mDefaultButton);
+                    mFalseButton.setBackground(mDefaultButton);
+                }
+                else {
+                    // false
+                    mAnswerView.setImageResource(R.drawable.politically_incorrect);
+                    // change background of buttons to default
+                    mTrueButton.setBackground(mDefaultButton);
+                    mFalseButton.setBackground(mDefaultButton);
+                }
+            }
+            else {
+                // clear correct/incorrect box
+                mAnswerView.setImageResource(R.drawable.question_mark);
+                // change background of buttons to default
+                mTrueButton.setBackground(mDefaultButton);
+                mFalseButton.setBackground(mDefaultButton);
+            }
+        }
 
         return;
     }
@@ -143,7 +192,8 @@ public class QuizActivity extends AppCompatActivity {
             // um this will just be a restart for debugging :)
             /****RESTART QUIZ****/
             questionIndex = 0;
-            textView.setText(questions[0]);
+            currQV = quizViews[0];
+            textView.setText(currQV.getQuestion());
             // clear correct/incorrect box
             //answerView.setText("");
             mAnswerView.setImageResource(R.drawable.question_mark);
@@ -151,7 +201,9 @@ public class QuizActivity extends AppCompatActivity {
             mTrueButton.setBackground(mDefaultButton);
             mFalseButton.setBackground(mDefaultButton);
             // allow true/false choice
-            currQuestionAnswered = false;
+            for (int i = 0; i < quizViews.length; i++) {
+                quizViews[i].isAnswered = false;
+            }
             /****RESTART QUIZ****/
             return true;
         }
