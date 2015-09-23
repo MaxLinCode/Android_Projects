@@ -1,6 +1,5 @@
 package com.microlux.maxlin.juancolin;
 
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,9 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
     private static final String LOG_TAG = QuizActivity.class.getCanonicalName();
@@ -20,8 +19,8 @@ public class QuizActivity extends AppCompatActivity {
     private ImageView mAnswerView;
     private Button mTrueButton;
     private Button mFalseButton;
-    private Button mNextButton;
-    private Button mPrevButton;
+    private ImageButton mNextButton;
+    private ImageButton mPrevButton;
     private Drawable mDefaultButton;
 
     private QuizView[] quizViews;
@@ -43,8 +42,8 @@ public class QuizActivity extends AppCompatActivity {
         // get buttons
         mTrueButton = (Button)findViewById(R.id.true_button);
         mFalseButton = (Button)findViewById(R.id.false_button);
-        mNextButton = (Button)findViewById(R.id.next_button);
-        mPrevButton = (Button)findViewById(R.id.prev_button);
+        mNextButton = (ImageButton)findViewById(R.id.next_button);
+        mPrevButton = (ImageButton)findViewById(R.id.prev_button);
 
         // keep default button's drawable
         mDefaultButton = mNextButton.getBackground();
@@ -75,7 +74,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // handle when true is pressed
-                checkAnswer(1, v);
+                currQV.setChoice(true);
+                updateView();
                 currQV.isAnswered = true;
             }
         });
@@ -84,7 +84,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // handle when false is pressed
-                checkAnswer(0, v);
+                currQV.setChoice(false);
+                updateView();
                 currQV.isAnswered = true;
             }
         });
@@ -104,32 +105,12 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
-    private void checkAnswer(int in, View v) {
-        if (questionIndex < quizViews.length && !currQV.isAnswered) {
-            if ((in == 1) == currQV.getAnswer()) {
-                // correct
-                mAnswerView.setImageResource(R.drawable.technically_correct);
-                v.setBackgroundColor(Color.parseColor("#4DFF4D"));   // green
-            } else {
-                // incorrect
-                mAnswerView.setImageResource(R.drawable.politically_incorrect);
-                v.setBackgroundColor(Color.parseColor("#FF7070"));   // red
-            }
-        }
-    }
-
     private void nextQuestion() {
         if (questionIndex + 1 < quizViews.length) {
             // go to next question
             questionIndex++;
             currQV = quizViews[questionIndex];
-            // set text for next question
-            textView.setText(currQV.getQuestion());
-            // clear correct/incorrect box
-            mAnswerView.setImageResource(R.drawable.question_mark);
-            // change background of buttons to default
-            mTrueButton.setBackground(mDefaultButton);
-            mFalseButton.setBackground(mDefaultButton);
+            updateView();
             return;
         }
 
@@ -143,34 +124,42 @@ public class QuizActivity extends AppCompatActivity {
             // go to prev question
             questionIndex--;
             currQV = quizViews[questionIndex];
-            // set screen for prev question
-            textView.setText(currQV.getQuestion());
-            if (currQV.isAnswered) {
-                if (currQV.getAnswer()) {
-                    // true
-                    mAnswerView.setImageResource(R.drawable.technically_correct);
-                    // change background of buttons to default
-                    mTrueButton.setBackground(mDefaultButton);
-                    mFalseButton.setBackground(mDefaultButton);
-                }
-                else {
-                    // false
-                    mAnswerView.setImageResource(R.drawable.politically_incorrect);
-                    // change background of buttons to default
-                    mTrueButton.setBackground(mDefaultButton);
-                    mFalseButton.setBackground(mDefaultButton);
-                }
-            }
-            else {
-                // clear correct/incorrect box
-                mAnswerView.setImageResource(R.drawable.question_mark);
-                // change background of buttons to default
-                mTrueButton.setBackground(mDefaultButton);
-                mFalseButton.setBackground(mDefaultButton);
-            }
+                updateView();
         }
 
         return;
+    }
+
+    private void updateView() {
+        // set text for next question
+        textView.setText(currQV.getQuestion());
+        // change background of buttons to default
+        mTrueButton.setBackground(mDefaultButton);
+        mFalseButton.setBackground(mDefaultButton);
+        if (currQV.isAnswered) {
+            if (currQV.getChoice() == currQV.getAnswer()) {
+                // true button
+                mAnswerView.setImageResource(R.drawable.technically_correct);
+                getChosenButton().setBackgroundColor(Color.parseColor("#4DFF4D"));   // green
+            } else {
+                // false button
+                mAnswerView.setImageResource(R.drawable.politically_incorrect);
+                getChosenButton().setBackgroundColor(Color.parseColor("#FF7070"));   // red
+            }
+        }
+        else {
+            // clear correct/incorrect box
+            mAnswerView.setImageResource(R.drawable.question_mark);
+        }
+    }
+
+    private Button getChosenButton() {
+        if (currQV.getChoice()) {
+            return mTrueButton;
+        }
+        else {
+            return mFalseButton;
+        }
     }
 
     @Override

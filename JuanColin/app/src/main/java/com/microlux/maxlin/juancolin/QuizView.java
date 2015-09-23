@@ -15,15 +15,9 @@ public class QuizView {
         answer = a;
     }
 
-    public void checkAnswer(boolean b) {
+    public void setChoice(boolean b) {
         if (!isAnswered) {
-            if (b == answer) {
-                pchoice = true;
-            }
-            else {
-                pchoice = false;
-            }
-
+            pchoice = b;
             isAnswered = true;
         }
 
