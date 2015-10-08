@@ -1,5 +1,6 @@
 package com.microlux.maxlin.juancolin;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,9 +12,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
     private static final String LOG_TAG = QuizActivity.class.getCanonicalName();
+    public static final String EXTRA_ANSWER_IS_TRUE = "answerIsTrue";
 
     private TextView textView;
     private ImageView mAnswerView;
@@ -21,6 +24,8 @@ public class QuizActivity extends AppCompatActivity {
     private Button mFalseButton;
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
+    private Button mCheatButton;
+    private boolean mIsCheater;
     private Drawable mDefaultButton;
 
     private QuizView[] quizViews;
@@ -44,6 +49,7 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton = (Button)findViewById(R.id.false_button);
         mNextButton = (ImageButton)findViewById(R.id.next_button);
         mPrevButton = (ImageButton)findViewById(R.id.prev_button);
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
 
         // keep default button's drawable
         mDefaultButton = mNextButton.getBackground();
@@ -103,9 +109,21 @@ public class QuizActivity extends AppCompatActivity {
                 prevQuestion();
             }
         });
+
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+                intent.putExtra(EXTRA_ANSWER_IS_TRUE, currQV.getAnswer());
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        updateView();
     }
 
     private void nextQuestion() {
+        mIsCheater = false;
         if (questionIndex + 1 < quizViews.length) {
             // go to next question
             questionIndex++;
@@ -120,11 +138,12 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void prevQuestion() {
+        mIsCheater = false;
         if (questionIndex - 1 >= 0) {
             // go to prev question
             questionIndex--;
             currQV = quizViews[questionIndex];
-                updateView();
+            updateView();
         }
 
         return;
@@ -137,14 +156,21 @@ public class QuizActivity extends AppCompatActivity {
         mTrueButton.setBackground(mDefaultButton);
         mFalseButton.setBackground(mDefaultButton);
         if (currQV.isAnswered) {
+            String output = "";
             if (currQV.getChoice() == currQV.getAnswer()) {
                 // true button
                 mAnswerView.setImageResource(R.drawable.technically_correct);
                 getChosenButton().setBackgroundColor(Color.parseColor("#4DFF4D"));   // green
+                output = "Correct!";
             } else {
                 // false button
                 mAnswerView.setImageResource(R.drawable.politically_incorrect);
                 getChosenButton().setBackgroundColor(Color.parseColor("#FF7070"));   // red
+                output = "Incorrect!";
+            }
+
+            if (mIsCheater) {
+                Toast.makeText(this, R.string.judgment_toast, Toast.LENGTH_SHORT).show();
             }
         }
         else {
@@ -160,6 +186,13 @@ public class QuizActivity extends AppCompatActivity {
         else {
             return mFalseButton;
         }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
     }
 
     @Override
