@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="stories_array">
+
+        <item>You are Jasón. You work part time at 7/11 as a cashier in the affluent neighborhood of Palos Verdes Estates. You always see wealthy customers walk in and out of the store and are always jealous of their fancy cars. One day, you decided that you had enough of this and decided to obtain a toy of your own.</item>
+
+        <item>You pull up at a red light next to a policeman in a modified undercover car. He says, "Nice car," and asks you to race him when the light turns green. </item>
+        <item>It\'s your very first time piloting a Boeing 747. The gigantic metal beast sped off the runway and soared into the azure sky. You pull off a couple air tricks, some aerials, a dive, and most impressively the 360 noscope. After finding that your fuel reserves are running dangerously low, you decide to stop at your next destination. </item>
+        <item>You\'re enjoying the tropical sunshine and beautiful bikini-clad women as you pilot the ship into port in picturesque Ensenada, Mexico. One of your companions from the previous night calls you over.</item>
+
+        <item>The officer calls you a little girl and drives off. You notice a sticker above his exhaust pipe that says, "Louder than your mom last night." Offended by this, you decide to call the number on the "How\'s my driving?" sticker located on his rear window.Distracted by your phone, you run a red light and get hit a drunk driver. You are all killed instantly.</item>
+        <item>You think that you\'d leave the cop far behind, but you forgot that the LAPD has recently upgraded to a full fleet of Bugatti Veyrons. The police officer does his job and decides to pull you over for reckless driving.</item>
+        <item>EMPTY</item>
+
+        <item>Debris from UA flights 11 and 175 fall from the World Trade Center and kill you.</item>
+        <item>You see lots of open flat land to land the plane and proceed to do so. It turns out that you landed next to a small drug cartel.</item>
+        <item>The fuel is running out and you quickly land in one of Korea\'s runways. Due to the foggy weather, you were unable to determine exactly where you were in Korea but quickly realize (due to a tweet from the TSA about a plane hijacking) that you actually landed in North Korea.</item>
+
+        <item>EMPTY</item>
+        <item>She says wants to go back and visit her family in Korea. So you takeoff in your plane.</item>
+        <item>The ship slowly drifts to the Mexico harbor.</item>
+
+        <item>EMPTY</item>
+        <item>He notices that you are driving a stolen car but because this is your only offense, you are sentenced to just 30 days in the county jail for Grand Theft Auto. You plead that 7/11 was just a part time job. When you are released, you go back to your job at 7/11. You work hard and are promoted to general manager. You meet a beautiful spouse and live happily ever after. </item>
+        <item>The cop speeds towards you and you both drive past glowing crystal boxes. As you collide with the boxes you hear noises: "dodododododododo". The noises then stop and you have a weird item in the passenger seat. For some reason there are mushrooms of the red and white variety. Curious, you try out the shrooms. The cop simultaneously sees a blue turtle shell on his lap. He tosses the shell out onto the streets. As the blue shell exits the window, it flies towards you and blows up your car. (The cop took first place)</item>
+
+        <item>EMPTY</item>
+        <item>Poor choice. It turns out your skills on rainbow road enraged the drug cartel so much, they pulled out their ak-47 and shot you up dead.</item>
+        <item>The owners of the kbbq store were contacted by the TSA and poisoned the bulgogi and the kalbi. You die after a couple mediocre bites of burnt kalbi.</item>
+
+        <item>The owners of the kbbq store were contacted by the TSA and poisoned the bulgogi and the kalbi. You die after a couple mediocre bites of burnt kalbi.</item>
+        <item>The Koreans searched you up on op.gg and discovered that you were Bronze 5. Knowing your low elo, they called you bronze trash and told you to be "gunned down like the degenerate you are". You\'re so embarrassed that you go back to the plane and go home.</item>
+        <item>You are very happy with your purchase of a new samsung phone but now you are a bit poorer. You can no longer afford to buy more fuel for your plane, so you decide to go onto a cruise ride instead.</item>
+    </string-array>
+
+    <string-array name="events_array">
+        <item>You decide to steal a...</item>
+
+        <item>You decide to...</item>
+        <item>You land in...</item>
+        <item>You decide to...</item>
+
+        <item></item>
+        <item>You decide to...</item>
+            <item></item>
+        <item>It turns out that they\'re pretty chill and you decide to...</item>
+            <item> While you were in North Korea you decided that it was worthwhile to...</item>
+    </string-array>
+
+    <string-array name="choices_array">
+        <item>index starts at 1 for choices</item>
+
+        <item>Lamborghini</item>
+        <item>Boeing 747</item>
+        <item>Cruise Ship</item>
+
+        <item>Politely decline the offer</item>
+        <item>Floor it</item>
+        <item>Visit NYC</item>
+
+        <item>New York City</item>
+        <item>Mexico</item>
+        <item>Korea</item>
+
+        <item>Stay at the helm</item>
+        <item>Follow her into a private cabin</item>
+        <item>Set the ship on auto-pilot</item>
+
+        <item>Apologize to him at the next stop sign </item>
+        <item>Pull over</item>
+        <item>Try and get away</item>
+
+        <item>Try and get away</item>
+        <item>Play Mario Kart 8</item>
+        <item>Have some Korean BBQ</item>
+
+        <item>Have some Korean BBQ</item>
+        <item>Rescue the people</item>
+        <item>Buy a new Samsung Galaxy S6 Edge</item>
+    </string-array>
+</resources>
