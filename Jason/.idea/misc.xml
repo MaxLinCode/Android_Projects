@@ -2,6 +2,7 @@
 <project version="4">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -31,6 +32,8 @@
       </value>
     </option>
   </component>
+=======
+>>>>>>> 73f8ffff6f920d1a06df008c7fecb606b62529e2
 =======
 >>>>>>> 73f8ffff6f920d1a06df008c7fecb606b62529e2
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
