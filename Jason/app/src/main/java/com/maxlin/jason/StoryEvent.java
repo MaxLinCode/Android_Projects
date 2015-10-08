@@ -19,9 +19,6 @@ public class StoryEvent {
         leads = storyLeads;
     }
 
-    public void choose(int c) {
-        choice = c;
-    }
 
     public String getStory() {
         return story;
