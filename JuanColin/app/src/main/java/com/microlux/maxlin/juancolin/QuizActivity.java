@@ -52,7 +52,7 @@ public class QuizActivity extends AppCompatActivity {
         mCheatButton = (Button)findViewById(R.id.cheat_button);
 
         // keep default button's drawable
-        mDefaultButton = mNextButton.getBackground();
+        mDefaultButton = mTrueButton.getBackground();
 
         // init variables
         String[] questions = getResources().getStringArray(R.array.questions_array);
