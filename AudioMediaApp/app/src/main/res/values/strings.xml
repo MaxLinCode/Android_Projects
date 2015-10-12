@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AudioMediaApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="johncena_play">Play</string>
+    <string name="johncena_stop">Stop</string>
+    <string name="johncean_description">John Cena defends the belt at WWE Super Slam.</string>
+</resources>
