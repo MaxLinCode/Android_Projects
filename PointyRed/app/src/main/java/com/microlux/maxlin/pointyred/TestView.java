@@ -3,8 +3,6 @@ package com.microlux.maxlin.pointyred;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,7 +20,7 @@ public class TestView extends SurfaceView implements SurfaceHolder.Callback {
     public TestView(Context context) {
         super(context);
         getHolder().addCallback(this);
-        if (thread == null) thread = new MainThread(getHolder(), this);
+        if (thread == null) thread = new MainThread(getHolder(), this, getResources());
 
         setFocusable(true);
     }
@@ -41,11 +39,11 @@ public class TestView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
+        thread.setRunning(false);
         while (retry) {
             try {
                 thread.join();
-                thread.setRunning(false);
-                retry  = false;
+                retry = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -56,7 +54,6 @@ public class TestView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawColor(Color.BLACK);
     }
 
     public boolean onTouchEvent(MotionEvent event) {

@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -20,10 +19,6 @@ public class MainThread extends Thread {
     private Resources res;
     private Paint paint;
 
-    private float startX, startY;
-    private float speedModifier;
-    private int circleX;
-    private int circleY;
     public float radius;
 
     private long actionDownTime, actionElapsedTime, actionLastTime;
@@ -39,20 +34,18 @@ public class MainThread extends Thread {
 
     private Juan juan;
 
-    public MainThread(SurfaceHolder sh, TestView testView) {
+    public MainThread(SurfaceHolder sh, TestView testView, Resources res) {
         super();
         this.surfaceHolder = sh;
         this.testView = testView;
-        res = Resources.getSystem();
+        this.res = res;
 
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(Color.RED);
-        juan = new Juan(BitmapFactory.decodeResource(res, R.drawable.juan), TestView.SCREEN_WIDTH / 2, TestView.SCREEN_HEIGHT / 2);
-        circleX = 100;
-        circleY = 100;
-        radius = 70;
-        speedModifier = 5;
+        juan = new Juan(BitmapFactory.decodeResource(res, R.drawable.juan), 0, 0);
+        juan.setX(TestView.SCREEN_WIDTH / 2 - juan.getWidth() / 2);
+        juan.setY(TestView.SCREEN_HEIGHT / 2 - juan.getHeight() / 2);
         dt = 0;
     }
 
@@ -80,35 +73,6 @@ public class MainThread extends Thread {
     }
 
     public void update() {
-        /*
-        // collision with wall
-        if (circleX <= radius || circleX >= screenWidth - radius) {
-            dx = -dx;
-            if (circleX <= 0 + radius ) {
-                circleX = (int) radius;
-            }
-            else {
-                circleX = (int) (screenWidth - radius);
-            }
-
-        }
-
-        if (circleY <= radius || circleY >= screenHeight - radius) {
-            dy = -dy;
-            if (circleY <= radius ) {
-                circleY = (int) radius;
-            }
-            else {
-                circleY = (int) (screenHeight - radius);
-            }
-        }
-
-        circleX += dx * speedModifier;
-        circleY += dy * speedModifier;
-
-        lastX = fingerX;
-        lastY = fingerY;
-        */
         actionLastTime = System.nanoTime();
     }
 
@@ -120,8 +84,8 @@ public class MainThread extends Thread {
             c = surfaceHolder.lockCanvas();
             synchronized (surfaceHolder) {
                 //clear the screen with the black
-                c.drawColor(Color.BLACK);
                 //This is where we draw the game engine.
+                c.drawColor(Color.BLACK);
                 juan.draw(c);
             }
         } finally {
@@ -139,27 +103,15 @@ public class MainThread extends Thread {
         int eventAction = event.getAction();
         int x = (int)event.getX();
         int y = (int)event.getY();
-        fingerX = x;
-        fingerY = y;
         switch (eventAction) {
             case MotionEvent.ACTION_DOWN:
-                //dx = 0 ;
-                //dy = 0;
-                circleX = x;
-                circleY = y;
-                //actionDownTime = System.nanoTime();
+                juan.handleInput(x,y, MotionEvent.ACTION_DOWN);
                 break;
             case MotionEvent.ACTION_MOVE:
-                circleX = x;
-                circleY = y;
+                juan.handleInput(x,y, MotionEvent.ACTION_MOVE);
                 break;
             case MotionEvent.ACTION_UP:
-                // release and let the ball go flying
-                actionElapsedTime = System.nanoTime() - actionLastTime;
-                if (actionElapsedTime / 1000000 != 0) {
-                   // dx = ((circleX - lastX) / (actionElapsedTime / 1000000));
-                   // dy = ((circleY - lastY) / (actionElapsedTime / 1000000));
-                }
+
                 break;
 
         }
