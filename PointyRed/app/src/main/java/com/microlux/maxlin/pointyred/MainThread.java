@@ -1,8 +1,11 @@
 package com.microlux.maxlin.pointyred;
 
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -11,23 +14,22 @@ import android.view.SurfaceHolder;
  */
 public class MainThread extends Thread {
     public static String LOG_TAG = MainThread.class.getCanonicalName();
-
     public static final int FPS = 60;
     public static final long targetTime = 1000/FPS;
 
-    private Paint redPaint;
-    private Paint whitePaint;
+    private Resources res;
+    private Paint paint;
 
-    private int startX, startY;
-    private int speedModifier;
+    private float startX, startY;
+    private float speedModifier;
     private int circleX;
     private int circleY;
     public float radius;
 
-    private int dx;  // velocities
-    private int dy;
-    private long actionDownTime, actionElapsedTime;
+    private long actionDownTime, actionElapsedTime, actionLastTime;
     private float dt;
+    private int fingerX, fingerY;
+    private int lastX, lastY;
     private boolean running;
 
     private SurfaceHolder surfaceHolder;
@@ -35,20 +37,18 @@ public class MainThread extends Thread {
     private int screenWidth;
     private int screenHeight;
 
+    private Juan juan;
+
     public MainThread(SurfaceHolder sh, TestView testView) {
         super();
         this.surfaceHolder = sh;
         this.testView = testView;
+        res = Resources.getSystem();
 
-        redPaint = new Paint();
-        redPaint.setAntiAlias(true);
-        redPaint.setColor(Color.RED);
-        whitePaint = new Paint();
-        whitePaint.setAntiAlias(true);
-        whitePaint.setColor(Color.WHITE);
-
-        dx = 0;
-        dy = 0;
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.RED);
+        juan = new Juan(BitmapFactory.decodeResource(res, R.drawable.juan), TestView.SCREEN_WIDTH / 2, TestView.SCREEN_HEIGHT / 2);
         circleX = 100;
         circleY = 100;
         radius = 70;
@@ -80,6 +80,7 @@ public class MainThread extends Thread {
     }
 
     public void update() {
+        /*
         // collision with wall
         if (circleX <= radius || circleX >= screenWidth - radius) {
             dx = -dx;
@@ -105,6 +106,10 @@ public class MainThread extends Thread {
         circleX += dx * speedModifier;
         circleY += dy * speedModifier;
 
+        lastX = fingerX;
+        lastY = fingerY;
+        */
+        actionLastTime = System.nanoTime();
     }
 
     public void draw() {
@@ -114,12 +119,10 @@ public class MainThread extends Thread {
             //lock canvas so nothing else can use it
             c = surfaceHolder.lockCanvas();
             synchronized (surfaceHolder) {
-                //clear the screen with the black painter.
-                c.drawRect(0, 0, c.getWidth(), c.getHeight(), whitePaint);
-                //draw stuff
-                c.drawCircle(circleX,circleY,radius,redPaint);
+                //clear the screen with the black
+                c.drawColor(Color.BLACK);
                 //This is where we draw the game engine.
-                // testView.draw(c);
+                juan.draw(c);
             }
         } finally {
             // do this in a finally so that if an exception is thrown
@@ -136,14 +139,15 @@ public class MainThread extends Thread {
         int eventAction = event.getAction();
         int x = (int)event.getX();
         int y = (int)event.getY();
-
+        fingerX = x;
+        fingerY = y;
         switch (eventAction) {
             case MotionEvent.ACTION_DOWN:
-                dx = 0 ;
-                dy = 0;
-                startX = x;
-                startY = y;
-                actionDownTime = System.nanoTime();
+                //dx = 0 ;
+                //dy = 0;
+                circleX = x;
+                circleY = y;
+                //actionDownTime = System.nanoTime();
                 break;
             case MotionEvent.ACTION_MOVE:
                 circleX = x;
@@ -151,10 +155,13 @@ public class MainThread extends Thread {
                 break;
             case MotionEvent.ACTION_UP:
                 // release and let the ball go flying
-                actionElapsedTime = System.nanoTime() - actionDownTime;
-                dx = (int) ((circleX-startX) / (actionElapsedTime / 1000000));
-                dy = (int) ((circleY-startY) / (actionElapsedTime / 1000000));
+                actionElapsedTime = System.nanoTime() - actionLastTime;
+                if (actionElapsedTime / 1000000 != 0) {
+                   // dx = ((circleX - lastX) / (actionElapsedTime / 1000000));
+                   // dy = ((circleY - lastY) / (actionElapsedTime / 1000000));
+                }
                 break;
+
         }
 
         return true;
