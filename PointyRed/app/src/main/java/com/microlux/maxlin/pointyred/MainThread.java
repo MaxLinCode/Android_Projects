@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -13,18 +14,15 @@ import android.view.SurfaceHolder;
  */
 public class MainThread extends Thread {
     public static String LOG_TAG = MainThread.class.getCanonicalName();
-    public static final int FPS = 60;
-    public static final long targetTime = 1000/FPS;
+    public static final int FPS = 30;
+    public static final int FRAME_TIME = 1000/FPS;
+    public static final int MAX_FRAME_SKIPS = 5;
 
-    private Resources res;
     private Paint paint;
 
     public float radius;
 
-    private long actionDownTime, actionElapsedTime, actionLastTime;
     private float dt;
-    private int fingerX, fingerY;
-    private int lastX, lastY;
     private boolean running;
 
     private SurfaceHolder surfaceHolder;
@@ -38,7 +36,6 @@ public class MainThread extends Thread {
         super();
         this.surfaceHolder = sh;
         this.testView = testView;
-        this.res = res;
 
         paint = new Paint();
         paint.setAntiAlias(true);
@@ -46,34 +43,40 @@ public class MainThread extends Thread {
         juan = new Juan(BitmapFactory.decodeResource(res, R.drawable.juan), 0, 0);
         juan.setX(TestView.SCREEN_WIDTH / 2 - juan.getWidth() / 2);
         juan.setY(TestView.SCREEN_HEIGHT / 2 - juan.getHeight() / 2);
-        dt = 0;
     }
 
     public void run() {
+        long startTime = System.currentTimeMillis();
+        int wait;
+        int framesSkipped = 0;
         while (running) {
-            long startTime, elapsedTime, wait;
-            startTime = System.nanoTime();
-
             update();
             draw();
 
-            // sleep
-            elapsedTime = System.nanoTime() - startTime;
-            dt = elapsedTime / 1000;
-            wait = (targetTime - elapsedTime /  1000000);
-
-            if (wait < 0) wait = 5;
-            try {
-                // delay the thread
-                Thread.sleep(wait);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            dt = (float) (System.currentTimeMillis() - startTime);
+            wait = (int) (FRAME_TIME - dt);
+            startTime = System.currentTimeMillis();
+            if (wait > 0) {
+                try {
+                    Thread.sleep(wait);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            // skip draws to catch up (max of 5 skipped)
+            while (wait < 0 && framesSkipped <= MAX_FRAME_SKIPS) {
+                Log.d(LOG_TAG, "frame skipped");
+                dt = (float) (System.currentTimeMillis() - startTime);
+                update();
+                wait += FRAME_TIME;
+                framesSkipped++;
+                startTime = System.currentTimeMillis();
             }
         }
     }
 
     public void update() {
-        actionLastTime = System.nanoTime();
+        juan.update(dt);
     }
 
     public void draw() {

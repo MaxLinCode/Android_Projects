@@ -10,7 +10,9 @@ import android.view.MotionEvent;
  * Created by MaxLin on 10/29/15.
  */
 public class Juan {
-    private int x,y;
+    private static final String LOG_TAG = Juan.class.getCanonicalName();
+    private float x,y;
+    private int dx,dy;
     private int height, width;
     private boolean touched = true;
 
@@ -19,10 +21,12 @@ public class Juan {
     private Bitmap juanImg;
     private Paint paint;
 
-    public Juan(Bitmap b, int x, int y) {
+    public Juan(Bitmap b, float x, float y) {
         juanImg = b;
         this.x = x;
         this.y = y;
+        dx = 400;
+        dy = 300;
         height = b.getWidth();
         width = b.getWidth();
 
@@ -39,11 +43,11 @@ public class Juan {
         this.y = y;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -105,6 +109,31 @@ public class Juan {
 
         }
 
+    }
+
+    public void update(float dt) {
+        if (x <= (TestView.SCREEN_WIDTH / 2) - box) {
+            x = (TestView.SCREEN_WIDTH / 2) - box;
+            dx = dx*-1;
+        }
+
+        if (x + width >= (TestView.SCREEN_WIDTH / 2) + box) {
+            x = (TestView.SCREEN_WIDTH / 2) + box - width;
+            dx = dx*-1;
+        }
+
+        if (y <= (TestView.SCREEN_HEIGHT / 2) - box) {
+            y = (TestView.SCREEN_HEIGHT / 2) - box;
+            dy = dy * -1;
+        }
+
+        if (y + height >= (TestView.SCREEN_HEIGHT / 2) + box) {
+            y = (TestView.SCREEN_HEIGHT / 2) + box - height;
+            dy = dy * -1;
+        }
+
+        x += dx * dt / 1000;
+        y += dy * dt / 1000;
     }
 
     public void draw(Canvas c) {
