@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 public class Juan {
     private static final String LOG_TAG = Juan.class.getCanonicalName();
     private float x,y;
-    private int dx,dy;
+    public int dx,dy;
     private int height, width;
     private boolean touched = true;
 
@@ -35,11 +35,11 @@ public class Juan {
         paint.setColor(Color.WHITE);
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
