@@ -1,0 +1,2 @@
+include ':javalibrary'
+include 'desktop', 'android', 'core'
