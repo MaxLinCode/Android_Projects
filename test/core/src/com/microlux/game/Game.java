@@ -7,17 +7,24 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 public class Game extends ApplicationAdapter {
 	SpriteBatch batch;
-	
+
 	Animation runAnim;
 	TextureRegion[] runFrames;
 	TextureRegion currentFrame;
+
 	float stateTime = 0;
-	
-	
+
+	TextureAtlas atlas;
+	Array<TextureAtlas.AtlasRegion> pikachuRun;
+	Animation pikachuRunAnim;
+	TextureRegion pikachuFrame;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -33,7 +40,12 @@ public class Game extends ApplicationAdapter {
 			}
 		}
 		tempFrames = null;
-		
+
+		atlas = new TextureAtlas(Gdx.files.internal("pikachuRun.atlas"));
+		pikachuRun = atlas.getRegions();
+		pikachuRunAnim = new Animation(0.15f, pikachuRun);
+		pikachuRunAnim.setPlayMode(PlayMode.LOOP);
+
 		runAnim = new Animation(1f/30f, runFrames);
 		runAnim.setPlayMode(PlayMode.LOOP);
 	}
@@ -43,9 +55,11 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stateTime += Gdx.graphics.getDeltaTime();
-		batch.begin();
 		currentFrame = runAnim.getKeyFrame(stateTime);
+		pikachuFrame = pikachuRunAnim.getKeyFrame(stateTime);
+		batch.begin();
 		batch.draw(currentFrame, 400, 400, currentFrame.getRegionWidth() * 4, currentFrame.getRegionHeight() * 4);
+		batch.draw(pikachuFrame, 800, 400, pikachuFrame.getRegionWidth() * 4, pikachuFrame.getRegionHeight() * 4);
 		batch.end();
 	}
 }

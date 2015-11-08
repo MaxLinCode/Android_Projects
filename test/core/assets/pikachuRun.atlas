@@ -1,0 +1,33 @@
+
+pikachuRun.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+run02
+  rotate: false
+  xy: 1, 1
+  size: 52, 35
+  orig: 52, 35
+  offset: 0, 0
+  index: -1
+run03
+  rotate: false
+  xy: 55, 1
+  size: 52, 35
+  orig: 52, 35
+  offset: 0, 0
+  index: -1
+run01
+  rotate: false
+  xy: 109, 1
+  size: 51, 35
+  orig: 51, 35
+  offset: 0, 0
+  index: -1
+run00
+  rotate: false
+  xy: 162, 1
+  size: 50, 35
+  orig: 50, 35
+  offset: 0, 0
+  index: -1
