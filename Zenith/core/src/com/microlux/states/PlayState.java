@@ -3,6 +3,7 @@ package com.microlux.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.microlux.entities.PikachuAnimation;
 import com.microlux.game.Game;
 import com.microlux.map.Background;
 
@@ -11,11 +12,12 @@ import com.microlux.map.Background;
  */
 public class PlayState implements GameState {
     Background bg;
-    Texture pikachu;
+
+    PikachuAnimation pikachu;
 
     public PlayState() {
         bg = new Background(new Texture(Gdx.files.internal("background.png")));
-        pikachu = new Texture(Gdx.files.internal("run1.png"));
+        pikachu = new PikachuAnimation();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class PlayState implements GameState {
     @Override
     public void draw(SpriteBatch batch) {
         bg.draw(batch);
-        batch.draw(pikachu, Game.SCREEN_WIDTH / 2, Game.SCREEN_HEIGHT / 2, pikachu.getWidth() * 4, pikachu.getHeight() * 4);
+        pikachu.draw(batch);
     }
 
     @Override
