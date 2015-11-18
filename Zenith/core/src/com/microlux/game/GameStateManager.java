@@ -17,11 +17,8 @@ public class GameStateManager {
         currentState = new PlayState();
     }
 
-    public void handleInput() {
-        currentState.handleInput();
-    }
-
     public void update(float dt) {
+        currentState.handleInput();
         currentState.update(dt);
     }
 
