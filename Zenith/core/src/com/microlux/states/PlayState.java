@@ -18,6 +18,8 @@ public class PlayState implements GameState {
     public PlayState() {
         bg = new Background(new Texture(Gdx.files.internal("background.png")));
         pikachu = new PikachuAnimation();
+        pikachu.setX((Game.SCREEN_WIDTH / 2) - pikachu.getWidth() / 2);
+        pikachu.setY(Game.SCREEN_HEIGHT / 2);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class PlayState implements GameState {
 
     @Override
     public void update(float dt) {
-
+        pikachu.update(dt);
     }
 
     @Override

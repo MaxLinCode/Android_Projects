@@ -31,7 +31,6 @@ public class PikachuAnimation {
         currentFrame = pikachuRunAnim.getKeyFrame(stateTime);
         width = currentFrame.getRegionWidth();
         height = currentFrame.getRegionHeight();
-        atlas.dispose();
     }
 
     public void update(float dt) {
