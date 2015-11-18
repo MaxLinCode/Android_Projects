@@ -27,16 +27,14 @@ public class PlayState implements GameState {
     public void handleInput() {
         if (Gdx.input.isTouched()) {
             if (Gdx.input.getX() < Game.SCREEN_WIDTH / 2) {
-                //  move right
-                //  move bg left
+                //  move left
+                //  move bg right
                 bg.translate(30, 0);
-                Gdx.app.log("Playstate", "Moving background to the left");
-                System.out.println("Moving right");
             }
 
             if (Gdx.input.getX() >= Game.SCREEN_WIDTH / 2) {
-                //  move left
-                //  move bg right
+                //  move right
+                //  move bg left
                 bg.translate(-30, 0);
             }
         }
