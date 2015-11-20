@@ -12,19 +12,19 @@ public class Background {
     float x, y;
     int width, height;
     Texture image;
-    Sprite mapSprite;
 
 
     public Background(Texture tex) {
+        x = 0;
+        y = 0;
         image = tex;
         width = image.getWidth();
         height = image.getHeight();
-        mapSprite = new Sprite(image, 0, 0, width, height);
     }
 
     public void translate(float movex, float movey) {
-        mapSprite.setX(mapSprite.getX() + movex);
-        mapSprite.setY(mapSprite.getY() + movey);
+        x += movex;
+        y += movey;
     }
 
     public void update(float dt) {
@@ -37,6 +37,6 @@ public class Background {
 
 
     public void draw(SpriteBatch batch) {
-        mapSprite.draw(batch);
+        batch.draw(image, x, y, width, height);
     }
 }

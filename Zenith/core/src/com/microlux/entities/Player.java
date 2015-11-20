@@ -18,16 +18,19 @@ public class Player {
     boolean isSun = true;
 
     public Player() {
-        zenith = new Sprite(sun, 0, 0, 32, 32);
+        x = 300;
+        y = 300;
+        width = sun.getWidth() * 3;
+        height = sun.getHeight() * 3;
+
     }
 
     public void update(float dt) {
-        x = zenith.getX();
-        y = zenith.getY();
+
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(sun, 250, 250);
+        batch.draw(sun, 0, 0, width, height);
     }
 
 
