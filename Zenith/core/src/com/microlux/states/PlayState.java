@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.microlux.entities.PikachuAnimation;
+import com.microlux.entities.Player;
 import com.microlux.game.Game;
 import com.microlux.map.Background;
+
+import java.io.File;
 
 /**
  * Created by MaxLin on 11/6/15.
@@ -14,12 +17,11 @@ public class PlayState implements GameState {
     Background bg;
 
     PikachuAnimation pikachu;
+    Player player;
 
     public PlayState() {
-        bg = new Background(new Texture(Gdx.files.internal("background.png")));
-        pikachu = new PikachuAnimation();
-        pikachu.setX((Game.SCREEN_WIDTH / 2) - pikachu.getWidth() / 2);
-        pikachu.setY(Game.SCREEN_HEIGHT / 2);
+        bg = new Background(new Texture(Gdx.files.internal("bgSunAndMoon.png")));
+        player = new Player();
     }
 
     @Override
@@ -29,30 +31,29 @@ public class PlayState implements GameState {
 
     @Override
     public void handleInput() {
+        // remember that input is top corner (0,0)
         if (Gdx.input.isTouched()) {
-            if (Gdx.input.getX() < Game.SCREEN_WIDTH / 2) {
-                //  move left
-                //  move bg right
-                bg.translate(30, 0);
+            if (Gdx.input.getY() > Gdx.graphics.getHeight() / 2) {
+                bg.translate(0 , 10);
             }
 
-            if (Gdx.input.getX() >= Game.SCREEN_WIDTH / 2) {
-                //  move right
-                //  move bg left
-                bg.translate(-30, 0);
+            if (Gdx.input.getY() <= Gdx.graphics.getHeight() / 2) {
+                bg.translate(0 , -10);
             }
         }
+
     }
 
     @Override
-    public void update(float dt) {
-        pikachu.update(dt);
+    public void update(float dt)
+    {
+        player.update(dt);
     }
 
     @Override
     public void draw(SpriteBatch batch) {
         bg.draw(batch);
-        pikachu.draw(batch);
+        player.draw(batch);
     }
 
     @Override
